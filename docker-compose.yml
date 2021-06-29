@@ -1,0 +1,22 @@
+version: "3"
+
+services: 
+
+    loader:
+        image: dimitri/pgloader
+        volumes: 
+            - ./data/db.sqlite3:/data/db.sqlite3 # the sqlite3 database to convert?
+        working_dir: /data
+        command: tail -f /dev/null # do nothing forever - exec commands elsewhere
+        container_name: loader
+        depends_on: 
+            - db
+
+    db:
+        image: postgres:11 # choose a suitable verion
+        environment:
+            POSTGRES_PASSWORD: example
+        volumes:
+            - ./data:/data
+        working_dir: /data
+        container_name: postgres
